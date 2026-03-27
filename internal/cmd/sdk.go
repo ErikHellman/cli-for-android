@@ -18,6 +18,7 @@ func newSDKCmd() *cobra.Command {
 		newSDKUninstallCmd(),
 		newSDKUpdateCmd(),
 		newSDKLicensesCmd(),
+		newSDKBootstrapCmd(),
 	)
 	return cmd
 }
@@ -158,6 +159,51 @@ func newSDKUpdateCmd() *cobra.Command {
 			return nil
 		},
 	}
+	return cmd
+}
+
+// ── sdk bootstrap ─────────────────────────────────────────────────────────
+
+func newSDKBootstrapCmd() *cobra.Command {
+	var (
+		flagDir   string
+		flagForce bool
+	)
+	cmd := &cobra.Command{
+		Use:   "bootstrap",
+		Short: "Install Android SDK command-line tools from scratch",
+		Long: `Downloads the Android SDK command-line tools from Google and installs them
+at the platform-default location (~/Library/Android/sdk on macOS,
+~/Android/Sdk on Linux, %LOCALAPPDATA%\Android\Sdk on Windows).
+
+No existing Android SDK installation is required.
+
+After bootstrapping, run:
+  export ANDROID_HOME=<sdk-root>
+  acli sdk licenses
+  acli doctor`,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			// Do NOT call android.New() — this command works without an existing SDK.
+			b := sdk.NewBootstrapper()
+			sdkRoot, alreadyInstalled, err := b.Bootstrap(cmd.Context(), flagDir, flagForce)
+			if err != nil {
+				return handleErr(err)
+			}
+			if alreadyInstalled {
+				output.Info("Android SDK command-line tools are already installed at %s", sdkRoot)
+				output.Info("Use --force to reinstall.")
+				return nil
+			}
+			output.Success("Command-line tools installed at %s", sdkRoot)
+			output.Info("Next steps:")
+			output.Info("  export ANDROID_HOME=%s", sdkRoot)
+			output.Info("  acli sdk licenses")
+			output.Info("  acli doctor")
+			return nil
+		},
+	}
+	cmd.Flags().StringVar(&flagDir, "dir", "", "Override the SDK root install path")
+	cmd.Flags().BoolVar(&flagForce, "force", false, "Reinstall even if already present")
 	return cmd
 }
 

@@ -16,7 +16,7 @@ func (c ErrorCode) ExitCode() int {
 	switch c {
 	case ErrDeviceNotFound, ErrMultipleDevices, ErrDeviceUnauthorized, ErrDeviceOffline:
 		return 3
-	case ErrSdkNotFound, ErrBinaryNotFound, ErrLicenseNotAccepted:
+	case ErrSdkNotFound, ErrBinaryNotFound, ErrLicenseNotAccepted, ErrBootstrapFailed:
 		return 4
 	case ErrBuildFailed:
 		return 5
@@ -52,6 +52,9 @@ const (
 	ErrAVDNotFound      ErrorCode = "avd_not_found"
 	ErrEmulatorTimeout  ErrorCode = "emulator_boot_timeout"
 	ErrPortInUse        ErrorCode = "port_in_use"
+
+	// Bootstrap
+	ErrBootstrapFailed ErrorCode = "bootstrap_failed"
 
 	// Misc
 	ErrPermissionDenied ErrorCode = "permission_denied"
