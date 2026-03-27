@@ -1,0 +1,16 @@
+# Build output
+dist/
+
+# Go toolchain
+*.test
+*.out
+coverage.txt
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
