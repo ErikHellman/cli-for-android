@@ -237,7 +237,7 @@ acli avd list --running                # only running emulators
 acli avd create Pixel9 --api 35                                    # arm64-v8a by default
 acli avd create MyPhone --api 34 --device pixel_7 --abi x86_64
 acli avd create TestPhone --api 35 --sdcard 512M --force
-acli avd create MyAuto --api 34 --tag android-automotive-playstore --device android-automotive-playstore
+acli avd create MyAuto --api 35-ext15 --tag android-automotive-playstore --device automotive_1408p_landscape_with_google_apis
 
 acli avd start Pixel9                  # launch emulator window
 acli avd start Pixel9 --headless       # no window (CI mode)
