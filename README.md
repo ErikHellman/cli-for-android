@@ -67,23 +67,44 @@ Android's command-line tooling is fragmented across six separate binaries with i
 
 ## Runtime Dependencies
 
-`acli` is a thin wrapper. The Android tooling it wraps must be installed separately.
+`acli` is a thin wrapper around Android's tooling. The SDK command-line tools can be installed automatically via `acli sdk bootstrap`; everything else must be installed separately.
 
 ### Required
 
 | Dependency | Version | Purpose | Install |
 |---|---|---|---|
-| **Android SDK** | Any recent | Required for all `acli sdk`, `avd`, `device`, `flash`, `instrument` commands | [Android Studio](https://developer.android.com/studio) or [command-line tools](https://developer.android.com/tools) |
+| **Android SDK Command-Line Tools** (`sdkmanager`, `avdmanager`) | Any recent | `acli sdk`, `acli avd`; also required for all other SDK-dependent commands | `acli sdk bootstrap` ← start here |
 | **Android Platform Tools** (`adb`, `fastboot`) | Any recent | `acli device`, `acli flash`, `acli instrument` | `acli sdk install platform-tools` |
-| **Android SDK Command-Line Tools** (`sdkmanager`, `avdmanager`) | Any recent | `acli sdk`, `acli avd` | Bundled with Android Studio, or download separately |
-| **Java (JDK)** | 11 or newer (17+ recommended) | Required by `sdkmanager`, `avdmanager`, and Gradle | [Temurin](https://adoptium.net), [Zulu](https://www.azul.com/downloads/) |
+| **Java (JDK)** | 17 or newer (21 recommended) | Required by `sdkmanager`, `avdmanager`, and Gradle | [SDKMAN](https://sdkman.io) — see below |
 
 ### Optional
 
 | Dependency | Purpose |
 |---|---|
-| **Android Emulator** (`emulator` binary) | `acli avd start` / `acli avd stop` |
+| **Android Emulator** (`emulator` binary) | `acli avd start` / `acli avd stop` — install with `acli sdk install emulator` |
 | **Gradle wrapper** (`gradlew` in project root) | All `acli build` commands |
+
+### Installing Java with SDKMAN
+
+[SDKMAN](https://sdkman.io) is the recommended way to install and manage Java versions on macOS and Linux. It handles download, extraction, and shell configuration automatically and makes switching between Java versions trivial.
+
+```bash
+# 1. Install SDKMAN
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# 2. Install Java 21 (Temurin — recommended for Android development)
+sdk install java 21-tem
+
+# 3. Verify
+java -version
+```
+
+To see all available JDK distributions and versions:
+
+```bash
+sdk list java
+```
 
 ### SDK Auto-Discovery
 
