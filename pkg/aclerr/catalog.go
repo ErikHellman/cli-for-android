@@ -216,6 +216,51 @@ var catalog = []ErrorPattern{
 		},
 	},
 
+	// ── Git ──────────────────────────────────────────────────────────────
+	{
+		Tool:    "git",
+		Pattern: regexp.MustCompile(`(?i)could not resolve host|unable to access|connection refused`),
+		Build: func(_ string) *AcliError {
+			return &AcliError{
+				Code:    ErrNetworkError,
+				Message: "Network error while contacting the Git remote.",
+				Detail:  "Could not reach the repository. Check your internet connection and the URL.",
+				FixCmds: []string{
+					"git ls-remote <repo-url>",
+				},
+			}
+		},
+	},
+	{
+		Tool:    "git",
+		Pattern: regexp.MustCompile(`(?i)repository not found|does not appear to be a git repository`),
+		Build: func(_ string) *AcliError {
+			return &AcliError{
+				Code:    ErrCloneFailed,
+				Message: "Git repository not found.",
+				Detail:  "The URL does not point to a valid Git repository. Check the URL and ensure the repository exists.",
+				FixCmds: []string{
+					"git ls-remote <repo-url>",
+				},
+			}
+		},
+	},
+	{
+		Tool:    "git",
+		Pattern: regexp.MustCompile(`(?i)permission denied|authentication failed`),
+		Build: func(_ string) *AcliError {
+			return &AcliError{
+				Code:    ErrPermissionDenied,
+				Message: "Git authentication failed.",
+				Detail:  "The repository exists but access was denied. Check your credentials or SSH keys.",
+				FixCmds: []string{
+					"ssh -T git@github.com",
+					"git credential reject",
+				},
+			}
+		},
+	},
+
 	// ── Gradle ───────────────────────────────────────────────────────────
 	{
 		Tool:    "gradle",
@@ -226,7 +271,7 @@ var catalog = []ErrorPattern{
 				Message: "Gradle wrapper not found.",
 				Detail:  "No gradlew script was found in the current directory or any parent. Make sure you are inside an Android project.",
 				FixCmds: []string{
-					"acli project init <name>",
+					"acli project init <repo-url>",
 					"cd /path/to/your/android/project",
 				},
 			}

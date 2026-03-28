@@ -16,7 +16,8 @@ func (c ErrorCode) ExitCode() int {
 	switch c {
 	case ErrDeviceNotFound, ErrMultipleDevices, ErrDeviceUnauthorized, ErrDeviceOffline:
 		return 3
-	case ErrSdkNotFound, ErrBinaryNotFound, ErrLicenseNotAccepted, ErrBootstrapFailed:
+	case ErrSdkNotFound, ErrBinaryNotFound, ErrLicenseNotAccepted, ErrBootstrapFailed,
+		ErrCloneFailed, ErrNotAndroidProject, ErrPackageRefactor:
 		return 4
 	case ErrBuildFailed:
 		return 5
@@ -55,6 +56,11 @@ const (
 
 	// Bootstrap
 	ErrBootstrapFailed ErrorCode = "bootstrap_failed"
+
+	// Project / Git
+	ErrCloneFailed       ErrorCode = "clone_failed"
+	ErrNotAndroidProject ErrorCode = "not_android_project"
+	ErrPackageRefactor   ErrorCode = "package_refactor_failed"
 
 	// Misc
 	ErrPermissionDenied ErrorCode = "permission_denied"
