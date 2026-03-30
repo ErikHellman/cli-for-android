@@ -512,7 +512,7 @@ Beyond the quick-start one-liner, here are all the ways to install `acli`.
 ### Build from source
 
 ```bash
-git clone https://github.com/ErikHellman/unified-unified-android-cli.git
+git clone https://github.com/ErikHellman/unified-android-cli.git
 cd unified-android-cli
 make install          # builds and installs to $GOPATH/bin
 ```
@@ -582,7 +582,7 @@ The error catalog covers: device not found, multiple devices, unauthorized devic
 ### Getting started
 
 ```bash
-git clone https://github.com/ErikHellman/unified-unified-android-cli.git
+git clone https://github.com/ErikHellman/unified-android-cli.git
 cd unified-android-cli
 
 go mod download        # download dependencies
